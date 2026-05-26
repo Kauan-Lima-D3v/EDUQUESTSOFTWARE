@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduQuest — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --primary-light: #A78BFA;
+      --secondary: #F59E0B;
+      --accent: #10B981;
+      --danger: #EF4444;
+      --bg-dark: #0F0A1E;
+      --bg-card: #1A1035;
+      --bg-card2: #231547;
+      --text: #F3F0FF;
+      --text-muted: #9B8EC4;
+      --border: rgba(167,139,250,0.2);
+      --glow: rgba(124,58,237,0.4);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Animated background */
+    .bg-orbs {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: floatOrb 8s ease-in-out infinite;
+    }
+    .orb-1 { width:400px; height:400px; background:#7C3AED; top:-100px; left:-100px; animation-delay:0s; }
+    .orb-2 { width:300px; height:300px; background:#F59E0B; bottom:-100px; right:-100px; animation-delay:-3s; }
+    .orb-3 { width:250px; height:250px; background:#10B981; top:40%; left:60%; animation-delay:-5s; }
+    @keyframes floatOrb {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-30px) scale(1.05); }
+      66% { transform: translate(-20px,20px) scale(0.95); }
+    }
+    /* Stars */
+    .stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    .star {
+      position:absolute; background:#fff; border-radius:50%; animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%,100%{opacity:.2; transform:scale(1);}
+      50%{opacity:1; transform:scale(1.3);}
+    }
+    /* Particles */
+    .particle {
+      position:fixed; pointer-events:none; z-index:1; font-size:20px;
+      animation: floatUp 6s ease-in-out infinite;
+    }
+    @keyframes floatUp {
+      0%{transform:translateY(100vh) rotate(0deg); opacity:0;}
+      10%{opacity:1;}
+      90%{opacity:.5;}
+      100%{transform:translateY(-100px) rotate(360deg); opacity:0;}
+    }
+    /* Main layout */
+    .page-wrap {
+      position:relative; z-index:10; width:100%; max-width:480px; padding:20px;
+    }
+    /* Logo */
+    .logo-section {
+      text-align:center; margin-bottom:24px;
+    }
+    .mascot {
+      font-size:72px; display:inline-block; animation: mascotBounce 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(124,58,237,0.8));
+    }
+    @keyframes mascotBounce {
+      0%,100%{transform:translateY(0) rotate(-5deg);}
+      50%{transform:translateY(-12px) rotate(5deg);}
+    }
+    .logo-title {
+      font-family:'Fredoka One', cursive;
+      font-size:52px; letter-spacing:2px;
+      background: linear-gradient(135deg, #A78BFA, #F59E0B, #10B981);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      filter: drop-shadow(0 0 20px rgba(167,139,250,0.6));
+    }
+    .logo-sub {
+      font-size:13px; color:var(--text-muted); font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-top:4px;
+    }
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius:28px;
+      padding:40px 36px;
+      backdrop-filter:blur(20px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border), inset 0 1px 0 rgba(255,255,255,0.05);
+      position:relative; overflow:hidden;
+    }
+    .card::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, #7C3AED, #F59E0B, #10B981, #7C3AED);
+      background-size:300% 100%;
+      animation: shimmerBar 3s linear infinite;
+    }
+    @keyframes shimmerBar {
+      0%{background-position:0% 0%;}
+      100%{background-position:300% 0%;}
+    }
+    .card-title {
+      font-family:'Fredoka One', cursive;
+      font-size:26px; color:var(--text); text-align:center; margin-bottom:8px;
+    }
+    .card-sub {
+      font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:32px;
+    }
+    /* Tabs */
+    .tabs {
+      display:flex; background:var(--bg-dark); border-radius:14px; padding:4px; margin-bottom:28px; gap:4px;
+    }
+    .tab {
+      flex:1; padding:10px; border-radius:10px; border:none; background:transparent;
+      font-family:'Nunito', sans-serif; font-weight:700; font-size:14px; color:var(--text-muted);
+      cursor:pointer; transition:all .3s;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, var(--primary), #5B21B6);
+      color:#fff;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+    }
+    .tab:hover:not(.active){ color:var(--text); background:rgba(255,255,255,0.05); }
+    /* Form */
+    .form-group { margin-bottom:18px; }
+    .form-label {
+      display:block; font-size:12px; font-weight:800; color:var(--text-muted);
+      text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;
+    }
+    .input-wrap {
+      position:relative;
+    }
+    .input-icon {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      font-size:18px; pointer-events:none;
+    }
+    input[type="text"], input[type="email"], input[type="password"], select {
+      width:100%; padding:14px 16px 14px 46px;
+      background:var(--bg-dark); border:1.5px solid var(--border);
+      border-radius:14px; color:var(--text);
+      font-family:'Nunito', sans-serif; font-size:15px; font-weight:600;
+      transition:all .3s; outline:none;
+    }
+    input:focus, select:focus {
+      border-color:var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.2), 0 0 20px rgba(124,58,237,0.1);
+      background:rgba(124,58,237,0.05);
+    }
+    input::placeholder { color:rgba(155,142,196,0.5); }
+    .toggle-pass {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; cursor:pointer; font-size:18px; color:var(--text-muted);
+      transition:color .2s;
+    }
+    .toggle-pass:hover { color:var(--primary-light); }
+    /* Role selector */
+    .role-selector {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px;
+    }
+    .role-btn {
+      padding:14px 8px; border-radius:14px; border:1.5px solid var(--border);
+      background:var(--bg-dark); color:var(--text-muted); cursor:pointer;
+      font-family:'Nunito', sans-serif; font-weight:700; font-size:13px;
+      transition:all .3s; text-align:center;
+    }
+    .role-btn span { display:block; font-size:28px; margin-bottom:4px; }
+    .role-btn.selected {
+      border-color:var(--primary-light);
+      background:rgba(124,58,237,0.15);
+      color:var(--text);
+      box-shadow: 0 0 20px rgba(124,58,237,0.2);
+    }
+    /* Remember me */
+    .remember-row {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;
+    }
+    .check-label {
+      display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; font-weight:700; color:var(--text-muted);
+    }
+    .check-label input { display:none; }
+    .checkmark {
+      width:20px; height:20px; border:2px solid var(--border);
+      border-radius:6px; display:flex; align-items:center; justify-content:center;
+      transition:all .2s;
+    }
+    .check-label input:checked + .checkmark {
+      background:var(--primary); border-color:var(--primary);
+    }
+    .check-label input:checked + .checkmark::after { content:'✓'; color:#fff; font-size:12px; font-weight:900; }
+    .forgot-link {
+      font-size:13px; font-weight:700; color:var(--primary-light); text-decoration:none;
+      transition:color .2s;
+    }
+    .forgot-link:hover { color:var(--secondary); }
+    /* Buttons */
+    .btn-primary {
+      width:100%; padding:16px; border-radius:14px; border:none;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color:#fff; font-family:'Fredoka One', cursive; font-size:20px; letter-spacing:1px;
+      cursor:pointer; transition:all .3s; position:relative; overflow:hidden;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+    }
+    .btn-primary::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      transform:translateX(-100%); transition:transform .4s;
+    }
+    .btn-primary:hover::before { transform:translateX(100%); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(124,58,237,0.5); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-primary.loading { pointer-events:none; opacity:.8; }
+    /* Divider */
+    .divider {
+      display:flex; align-items:center; gap:12px; margin:20px 0;
+    }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .divider span { font-size:12px; color:var(--text-muted); font-weight:700; }
+    /* Social */
+    .social-btn {
+      width:100%; padding:13px; border-radius:14px;
+      border:1.5px solid var(--border); background:var(--bg-dark);
+      color:var(--text); font-family:'Nunito', sans-serif; font-weight:700; font-size:14px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:all .3s;
+    }
+    .social-btn:hover { border-color:var(--primary-light); background:rgba(124,58,237,0.1); transform:translateY(-1px); }
+    /* Alert */
+    .alert {
+      padding:12px 16px; border-radius:12px; margin-bottom:16px;
+      font-size:13px; font-weight:700; display:none; align-items:center; gap:8px;
+    }
+    .alert.error { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#FCA5A5; display:flex; }
+    .alert.success { background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#6EE7B7; display:flex; }
+    /* Form panels */
+    .form-panel { display:none; }
+    .form-panel.active { display:block; }
+    /* Forgot panel */
+    #forgot-panel {
+      display:none; position:fixed; inset:0; z-index:100;
+      background:rgba(0,0,0,0.7); backdrop-filter:blur(10px);
+      align-items:center; justify-content:center; padding:20px;
+    }
+    #forgot-panel.show { display:flex; }
+    .modal-card {
+      background:var(--bg-card); border:1px solid var(--border); border-radius:24px;
+      padding:36px; width:100%; max-width:400px;
+      box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    }
+    .modal-card h3 { font-family:'Fredoka One',cursive; font-size:24px; color:var(--text); margin-bottom:8px; }
+    .modal-card p { font-size:13px; color:var(--text-muted); margin-bottom:20px; }
+    .modal-close { float:right; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:22px; }
+    /* Toast */
+    .toast {
+      position:fixed; bottom:24px; right:24px; z-index:9999;
+      background:var(--bg-card2); border:1px solid var(--border); border-radius:16px;
+      padding:16px 24px; display:flex; align-items:center; gap:12px;
+      font-size:14px; font-weight:700; color:var(--text);
+      transform:translateY(100px); opacity:0; transition:all .4s cubic-bezier(.34,1.56,.64,1);
+      box-shadow:0 8px 30px rgba(0,0,0,0.4);
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    /* Responsive */
+    @media(max-width:480px){
+      .card{padding:28px 20px;}
+      .logo-title{font-size:40px;}
+      .mascot{font-size:56px;}
+    }
+    /* Dark mode toggle */
+    .theme-toggle {
+      position:fixed; top:20px; right:20px; z-index:50;
+      background:var(--bg-card); border:1px solid var(--border); border-radius:50%;
+      width:44px; height:44px; cursor:pointer; font-size:20px;
+      display:flex; align-items:center; justify-content:center;
+      transition:all .3s;
+    }
+    .theme-toggle:hover { transform:rotate(20deg) scale(1.1); }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="stars" id="stars"></div>
+
+<!-- Floating particles -->
+<div id="particles"></div>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" title="Tema">🌙</button>
+
+<!-- Main content -->
+<div class="page-wrap">
+  <!-- Logo -->
+  <div class="logo-section">
+    <div class="mascot" id="mascot">🦉</div>
+    <div class="logo-title">EduQuest</div>
+    <div class="logo-sub">Aprenda. Jogue. Evolua.</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="card-title">Bem-vindo de volta! 🎮</div>
+    <div class="card-sub">Entre na sua aventura educacional</div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Entrar</button>
+      <button class="tab" onclick="switchTab('cadastro')">Cadastrar</button>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alert">
+      <span id="alert-icon">⚠️</span>
+      <span id="alert-msg"></span>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div class="form-panel active" id="panel-login">
+      <!-- Role selector -->
+      <div class="role-selector">
+        <button class="role-btn selected" onclick="selectRole(this,'aluno')" data-role="aluno">
+          <span>🎒</span>Aluno
+        </button>
+        <button class="role-btn" onclick="selectRole(this,'pais')" data-role="pais">
+          <span>👨‍👩‍👧</span>Pais
+        </button>
+        <button class="role-btn" onclick="selectRole(this,'professor')" data-role="professor">
+          <span>👩‍🏫</span>Professor
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">E-mail ou Usuário</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="text" id="login-email" placeholder="seu@email.com" autocomplete="username">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="login-senha" placeholder="Sua senha secreta" autocomplete="current-password">
+          <button class="toggle-pass" onclick="togglePass('login-senha',this)">👁️</button>
+        </div>
+      </div>
+
+      <div class="remember-row">
+        <label class="check-label">
+          <input type="checkbox" id="remember-me" checked>
+          <span class="checkmark"></span>
+          Lembrar de mim
+        </label>
+        <a href="#" class="forgot-link" onclick="showForgot()">Esqueci a senha</a>
+      </div>
+
+      <button class="btn-primary" onclick="handleLogin()">
+        🚀 Entrar na Aventura!
+      </button>
+
+      <div class="divider"><span>ou entre com</span></div>
+
+      <button class="social-btn" onclick="showToast('🔮','Login social em breve!')">
+        <span>🌐</span> Continuar com Google
+      </button>
+    </div>
+
+    <!-- CADASTRO PANEL -->
+    <div class="form-panel" id="panel-cadastro">
+      <div class="form-group">
+        <label class="form-label">Tipo de conta</label>
+        <div class="role-selector">
+          <button class="role-btn selected" onclick="selectRole(this,'aluno','cad')" data-role="aluno">
+            <span>🎒</span>Aluno
+          </button>
+          <button class="role-btn" onclick="selectRole(this,'pais','cad')" data-role="pais">
+            <span>👨‍👩‍👧</span>Pais
+          </button>
+          <button class="role-btn" onclick="selectRole(this,'professor','cad')" data-role="professor">
+            <span>👩‍🏫</span>Professor
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome Completo</label>
+        <div class="input-wrap">
+          <span class="input-icon">✨</span>
+          <input type="text" id="cad-nome" placeholder="Seu nome de herói">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="email" id="cad-email" placeholder="seu@email.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="cad-senha" placeholder="Crie uma senha forte">
+          <button class="toggle-pass" onclick="togglePass('cad-senha',this)">👁️</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirmar Senha</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔐</span>
+          <input type="password" id="cad-confirmar" placeholder="Repita a senha">
+          <button class="toggle-pass" onclick="togglePass('cad-confirmar',this)">👁️</button>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="handleCadastro()" style="background:linear-gradient(135deg,#10B981,#059669);">
+        🌟 Criar Minha Conta!
+      </button>
+
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--text-muted);">
+        Ao criar conta você concorda com os <a href="#" style="color:var(--primary-light);">Termos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-muted);">
+    🎓 EduQuest — Aprendizado para todos • v1.0
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="forgot-panel">
+  <div class="modal-card">
+    <button class="modal-close" onclick="hideForgot()">✕</button>
+    <h3>🔑 Recuperar Senha</h3>
+    <p>Digite seu e-mail cadastrado e enviaremos as instruções.</p>
+    <div class="form-group">
+      <div class="input-wrap">
+        <span class="input-icon">📧</span>
+        <input type="email" id="forgot-email" placeholder="seu@email.com">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="handleForgot()" style="font-size:16px;padding:13px;">
+      📨 Enviar Instruções
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✨</span>
+  <span id="toast-msg">Mensagem</span>
+</div>
+
+<script>
+  // ===== STARS =====
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+    starsEl.appendChild(s);
+  }
+
+  // ===== PARTICLES =====
+  const emojis=['⭐','🌟','💫','✨','🎯','📚','🎮','🏆','💎','🎪'];
+  const pEl=document.getElementById('particles');
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.cssText=`left:${Math.random()*100}%;animation-delay:${Math.random()*6}s;animation-duration:${5+Math.random()*5}s;font-size:${14+Math.random()*14}px`;
+    pEl.appendChild(p);
+  }
+
+  // ===== STATE =====
+  let loginRole='aluno', cadRole='aluno';
+
+  function selectRole(btn, role, type='login'){
+    const parent=btn.closest('.role-selector');
+    parent.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    if(type==='login') loginRole=role;
+    else cadRole=role;
+  }
+
+  function switchTab(tab){
+    document.querySelectorAll('.tab').forEach((t,i)=>{
+      t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='cadastro'));
+    });
+    document.getElementById('panel-login').classList.toggle('active', tab==='login');
+    document.getElementById('panel-cadastro').classList.toggle('active', tab==='cadastro');
+    clearAlert();
+  }
+
+  function togglePass(id, btn){
+    const inp=document.getElementById(id);
+    if(inp.type==='password'){inp.type='text'; btn.textContent='🙈';}
+    else{inp.type='password'; btn.textContent='👁️';}
+  }
+
+  // ===== TOAST =====
+  let toastTimer;
+  function showToast(icon,msg){
+    const t=document.getElementById('toast');
+    document.getElementById('toast-icon').textContent=icon;
+    document.getElementById('toast-msg').textContent=msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+  }
+
+  // ===== ALERT =====
+  function showAlert(msg,type='error'){
+    const a=document.getElementById('alert');
+    document.getElementById('alert-icon').textContent=type==='error'?'⚠️':'✅';
+    document.getElementById('alert-msg').textContent=msg;
+    a.className='alert '+(type==='error'?'error':'success');
+  }
+  function clearAlert(){
+    const a=document.getElementById('alert');
+    a.className='alert';
+  }
+
+  // ===== USERS DATABASE (localStorage) =====
+  function getUsers(){ try{return JSON.parse(localStorage.getItem('eq_users')||'[]');}catch{return[];} }
+  function saveUsers(u){ localStorage.setItem('eq_users',JSON.stringify(u)); }
+
+  // ===== LOGIN =====
+  function handleLogin(){
+    const email=document.getElementById('login-email').value.trim();
+    const senha=document.getElementById('login-senha').value;
+    const remember=document.getElementById('remember-me').checked;
+    clearAlert();
+
+    if(!email||!senha){ showAlert('Preencha todos os campos!'); return; }
+
+    const users=getUsers();
+    const user=users.find(u=>(u.email===email||u.nome===email)&&u.senha===senha&&u.role===loginRole);
+
+    if(!user){
+      showAlert('E-mail/usuário ou senha incorretos!');
+      return;
+    }
+
+    // Save session
+    const session={...user, loginAt: Date.now()};
+    if(remember) localStorage.setItem('eq_session', JSON.stringify(session));
+    else sessionStorage.setItem('eq_session', JSON.stringify(session));
+
+    showToast('🎉','Bem-vindo, '+user.nome+'!');
+
+    const btn=document.querySelector('#panel-login .btn-primary');
+    btn.textContent='⏳ Carregando...';
+    btn.classList.add('loading');
+
+    setTimeout(()=>{
+      if(user.role==='aluno') window.location.href='dashboard.html';
+      else if(user.role==='pais') window.location.href='pais.html';
+      else window.location.href='professor.html';
+    }, 1500);
+  }
+
+  // ===== CADASTRO =====
+  function handleCadastro(){
+    const nome=document.getElementById('cad-nome').value.trim();
+    const email=document.getElementById('cad-email').value.trim();
+    const senha=document.getElementById('cad-senha').value;
+    const confirmar=document.getElementById('cad-confirmar').value;
+    clearAlert();
+
+    if(!nome||!email||!senha||!confirmar){ showAlert('Preencha todos os campos!'); return; }
+    if(senha.length<6){ showAlert('Senha deve ter pelo menos 6 caracteres!'); return; }
+    if(senha!==confirmar){ showAlert('As senhas não coincidem!'); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showAlert('E-mail inválido!'); return; }
+
+    const users=getUsers();
+    if(users.find(u=>u.email===email)){ showAlert('Este e-mail já está cadastrado!'); return; }
+
+    const newUser={
+      id: 'u_'+Date.now(),
+      nome, email, senha, role: cadRole,
+      avatar:'🦉', moedas:100, xp:0, nivel:1,
+      streak:0, missoes:[], createdAt: Date.now(),
+      badges:[], config:{ darkMode:true, sons:true, antidistracao:false }
+    };
+    users.push(newUser);
+    saveUsers(users);
+
+    showAlert('🎉 Conta criada com sucesso! Faça login para entrar.','success');
+    showToast('🌟','Conta criada! Bem-vindo ao EduQuest!');
+
+    setTimeout(()=>{ switchTab('login'); clearAlert(); },2000);
+  }
+
+  // ===== FORGOT =====
+  function showForgot(){ document.getElementById('forgot-panel').classList.add('show'); }
+  function hideForgot(){ document.getElementById('forgot-panel').classList.remove('show'); }
+  function handleForgot(){
+    const email=document.getElementById('forgot-email').value.trim();
+    if(!email){ showToast('⚠️','Digite um e-mail!'); return; }
+    const users=getUsers();
+    if(users.find(u=>u.email===email)){
+      showToast('📨','Instruções enviadas para '+email);
+    } else {
+      showToast('❌','E-mail não encontrado!');
+    }
+    hideForgot();
+  }
+
+  // ===== THEME =====
+  function toggleTheme(){
+    document.body.classList.toggle('light');
+    const btn=document.querySelector('.theme-toggle');
+    btn.textContent=document.body.classList.contains('light')?'☀️':'🌙';
+  }
+
+  // ===== KEYBOARD =====
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const panel=document.querySelector('.form-panel.active');
+      if(panel&&panel.id==='panel-login') handleLogin();
+      else if(panel&&panel.id==='panel-cadastro') handleCadastro();
+    }
+  });
+
+  // ===== AUTO LOGIN CHECK =====
+  (function(){
+    const s=localStorage.getItem('eq_session')||sessionStorage.getItem('eq_session');
+    if(s){
+      try{
+        const u=JSON.parse(s);
+        showToast('👋','Oi de novo, '+u.nome+'!');
+        document.getElementById('login-email').value=u.email;
+      }catch{}
+    }
+  })();
+
+  // Mascot interaction
+  document.getElementById('mascot').addEventListener('click',()=>{
+    const msgs=['🦉 Vamos estudar?','✨ Você consegue!','🎮 Hora de jogar!','🌟 Seja um campeão!'];
+    showToast('🦉', msgs[Math.floor(Math.random()*msgs.length)]);
+  });
+
+  // ===== DEFAULT USER =====
+  (function(){
+    const u=getUsers();
+    if(!u.find(x=>x.email==='aluno@demo.com')){
+      u.push({id:'demo1',nome:'Aluno Demo',email:'aluno@demo.com',senha:'123456',role:'aluno',avatar:'🦊',moedas:500,xp:1200,nivel:5,streak:7,missoes:[],createdAt:Date.now(),badges:['🏆','⭐'],config:{darkMode:true,sons:true,antidistracao:false}});
+      u.push({id:'demo2',nome:'Pai Demo',email:'pais@demo.com',senha:'123456',role:'pais',avatar:'👨',moedas:0,xp:0,nivel:1,streak:0,missoes:[],createdAt:Date.now(),badges:[],config:{darkMode:true,sons:true,antidistracao:false}});
+      u.push({id:'demo3',nome:'Prof Demo',email:'prof@demo.com',senha:'123456',role:'professor',avatar:'👩‍🏫',moedas:0,xp:0,nivel:1,streak:0,missoes:[],createdAt:Date.now(),badges:[],config:{darkMode:true,sons:true,antidistracao:false}});
+      saveUsers(u);
+    }
+  })();
+</script>
+</body>
+</html>

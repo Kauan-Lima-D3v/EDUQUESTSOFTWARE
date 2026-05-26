@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>EduQuest — Aprenda. Evolua. Conquiste.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --primary-light: #A78BFA;
+      --secondary: #F59E0B;
+      --accent: #10B981;
+      --pink: #EC4899;
+      --blue: #3B82F6;
+      --bg: #050311;
+      --card: #0F0A1E;
+      --card2: #160E2A;
+      --text: #F3F0FF;
+      --text-muted: #9B8EC4;
+      --border: rgba(167,139,250,0.15);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS BG ── */
+    #bg-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(5,3,17,0.7);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 28px;
+      background: linear-gradient(135deg, #A78BFA, #F59E0B, #10B981);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 14px rgba(167,139,250,0.5));
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-weight: 600;
+      font-size: 15px; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 10px 24px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff; font-family: 'Space Grotesk'; font-weight: 700;
+      font-size: 15px; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      transition: all .3s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.5); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 10;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 99px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.3);
+      font-size: 13px; font-weight: 700; color: var(--primary-light);
+      margin-bottom: 32px;
+      animation: fadeDown .8s ease both;
+    }
+    .hero-badge span { display:inline-block; animation: pulse 1.5s ease-in-out infinite; }
+
+    .hero-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(56px, 8vw, 100px);
+      line-height: 1.05;
+      margin-bottom: 24px;
+      animation: fadeDown .8s .1s ease both;
+    }
+    .hero-title .line1 {
+      background: linear-gradient(135deg, #F3F0FF 30%, #A78BFA);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-title .line2 {
+      background: linear-gradient(135deg, #F59E0B, #EC4899, #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(245,158,11,0.4));
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px); color: var(--text-muted);
+      max-width: 600px; line-height: 1.7; font-weight: 400;
+      margin-bottom: 48px;
+      animation: fadeDown .8s .2s ease both;
+    }
+
+    .hero-btns {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 80px;
+      animation: fadeDown .8s .3s ease both;
+    }
+    .btn-hero-primary {
+      padding: 16px 36px; border-radius: 16px; border: none;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff; font-family: 'Space Grotesk'; font-weight: 700;
+      font-size: 17px; cursor: pointer;
+      box-shadow: 0 8px 40px rgba(124,58,237,0.5);
+      transition: all .3s;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-hero-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 50px rgba(124,58,237,0.6); }
+    .btn-hero-secondary {
+      padding: 16px 36px; border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text); font-family: 'Space Grotesk'; font-weight: 700;
+      font-size: 17px; cursor: pointer;
+      transition: all .3s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.08); border-color: var(--primary-light); }
+
+    /* floating emojis */
+    .float-emojis { position: relative; animation: fadeDown .8s .4s ease both; }
+    .emoji-float {
+      position: absolute; font-size: 28px; animation: floatRandom 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+      animation: fadeDown .8s .4s ease both;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Fredoka One', cursive; font-size: 42px;
+      background: linear-gradient(135deg, #A78BFA, #F59E0B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-desc { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+    /* ── FEATURES ── */
+    .section {
+      position: relative; z-index: 10;
+      padding: 100px 60px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 13px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--primary-light);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(36px, 4vw, 54px);
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--text-muted); max-width: 500px;
+      line-height: 1.7; margin-bottom: 64px;
+    }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px; padding: 32px;
+      transition: all .4s; position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(124,58,237,0.08), transparent 60%);
+      opacity: 0; transition: opacity .4s;
+    }
+    .feat-card:hover { transform: translateY(-6px); border-color: var(--primary-light); }
+    .feat-card:hover::before { opacity: 1; }
+    .feat-icon {
+      width: 60px; height: 60px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 20px;
+    }
+    .feat-name {
+      font-family: 'Fredoka One', cursive; font-size: 22px; margin-bottom: 10px;
+    }
+    .feat-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── ROLES ── */
+    .roles-section {
+      position: relative; z-index: 10;
+      padding: 60px; background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .roles-inner { max-width: 1200px; margin: 0 auto; }
+    .roles-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+      margin-top: 56px;
+    }
+    .role-card {
+      border-radius: 28px; padding: 36px; text-align: center;
+      position: relative; overflow: hidden;
+      transition: all .4s; cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .role-card:hover { transform: translateY(-8px); }
+    .role-card.student { background: linear-gradient(135deg, #1E1B4B, #2D1B69); border-color: rgba(124,58,237,0.4); }
+    .role-card.parents { background: linear-gradient(135deg, #064E3B, #065F46); border-color: rgba(16,185,129,0.4); }
+    .role-card.teacher { background: linear-gradient(135deg, #78350F, #92400E); border-color: rgba(245,158,11,0.4); }
+    .role-emoji { font-size: 72px; display: block; margin-bottom: 20px; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4)); }
+    .role-name {
+      font-family: 'Fredoka One', cursive; font-size: 28px; margin-bottom: 10px;
+    }
+    .role-desc { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 24px; }
+    .role-btn {
+      display: inline-block; padding: 12px 28px; border-radius: 14px;
+      font-weight: 700; font-size: 15px; text-decoration: none;
+      transition: all .3s;
+    }
+    .role-card.student .role-btn { background: rgba(124,58,237,0.3); color: #C4B5FD; border: 1px solid rgba(124,58,237,0.4); }
+    .role-card.parents .role-btn { background: rgba(16,185,129,0.3); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.4); }
+    .role-card.teacher .role-btn { background: rgba(245,158,11,0.3); color: #FDE68A; border: 1px solid rgba(245,158,11,0.4); }
+    .role-btn:hover { filter: brightness(1.3); transform: scale(1.04); }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute; top: 40px; left: 10%; right: 10%; height: 2px;
+      background: linear-gradient(90deg, #7C3AED, #F59E0B, #10B981, #EC4899);
+      border-radius: 99px;
+    }
+    .step-card {
+      text-align: center; padding: 24px 16px; position: relative; z-index: 1;
+    }
+    .step-num {
+      width: 80px; height: 80px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive; font-size: 32px;
+      margin: 0 auto 20px;
+      position: relative; z-index: 1;
+    }
+    .step-title { font-family: 'Fredoka One', cursive; font-size: 20px; margin-bottom: 8px; }
+    .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── DEMO CARD ── */
+    .demo-section {
+      position: relative; z-index: 10;
+      padding: 60px;
+      background: linear-gradient(135deg, #0D0820, #130D25);
+      border-top: 1px solid var(--border);
+    }
+    .demo-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .demo-preview {
+      background: var(--card2); border-radius: 24px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+    }
+    .demo-bar {
+      padding: 14px 20px; background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .demo-body { padding: 24px; }
+    .demo-user-row {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+    }
+    .demo-avatar { font-size: 40px; }
+    .demo-xp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; margin-top: 6px; }
+    .demo-xp-fill { height: 100%; width: 68%; background: linear-gradient(90deg, #7C3AED, #F59E0B); border-radius: 99px; }
+    .demo-missions { display: flex; flex-direction: column; gap: 10px; }
+    .demo-mission {
+      padding: 14px 16px; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); border-radius: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .demo-mission.done { opacity: .5; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 10;
+      border-top: 1px solid var(--border);
+      padding: 40px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card);
+    }
+    .footer-logo { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--primary-light); }
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+    @keyframes floatRandom {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      25% { transform: translate(10px,-15px) rotate(10deg); }
+      50% { transform: translate(-8px,-25px) rotate(-5deg); }
+      75% { transform: translate(12px,-10px) rotate(15deg); }
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      position: relative; z-index: 10; overflow: hidden;
+      background: rgba(124,58,237,0.1);
+      border-top: 1px solid rgba(124,58,237,0.2);
+      border-bottom: 1px solid rgba(124,58,237,0.2);
+      padding: 14px 0;
+    }
+    .ticker {
+      display: flex; width: max-content;
+      animation: ticker 25s linear infinite;
+    }
+    .ticker-item {
+      padding: 0 40px; font-size: 14px; font-weight: 700;
+      color: var(--primary-light); white-space: nowrap;
+    }
+    .ticker-sep { color: var(--secondary); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .section { padding: 60px 24px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .roles-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .steps-grid::before { display: none; }
+      .demo-inner { grid-template-columns: 1fr; }
+      .demo-preview { display: none; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .roles-section { padding: 40px 24px; }
+      .demo-section { padding: 40px 24px; }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .stats-row { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated canvas background -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🦉 EduQuest</div>
+  <div class="nav-links">
+    <a href="#features">Recursos</a>
+    <a href="#roles">Perfis</a>
+    <a href="#como-funciona">Como Funciona</a>
+  </div>
+  <a href="login.html" class="nav-cta">Entrar na Plataforma →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span>✨</span> Plataforma Gamificada de Aprendizado</div>
+  <h1 class="hero-title">
+    <div class="line1">Aprenda.</div>
+    <div class="line2">Evolua. Conquiste.</div>
+  </h1>
+  <p class="hero-sub">
+    O EduQuest transforma o estudo em aventura. Ganhe XP, suba de nível, complete missões e compete no ranking — tudo enquanto aprende de verdade.
+  </p>
+  <div class="hero-btns">
+    <a href="login.html" class="btn-hero-primary">🚀 Começar Agora</a>
+    <a href="#roles" class="btn-hero-secondary">✨ Ver Perfis</a>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-desc">Missões Disponíveis</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-desc">Perfis de Acesso</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-desc">Gratuito</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">🔥</div>
+      <div class="stat-desc">Streak Diário</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">⭐ Ganhe XP em cada missão</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🏆 Suba no ranking da turma</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🔥 Mantenha seu streak diário</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">📚 6 matérias disponíveis</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">💰 Troque moedas na loja</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🧠 Quizzes com timer</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">👨‍👩‍👧 Pais acompanham em tempo real</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">👩‍🏫 Professores criam missões</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">⭐ Ganhe XP em cada missão</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🏆 Suba no ranking da turma</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🔥 Mantenha seu streak diário</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">📚 6 matérias disponíveis</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">💰 Troque moedas na loja</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🧠 Quizzes com timer</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">👨‍👩‍👧 Pais acompanham em tempo real</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">👩‍🏫 Professores criam missões</span>
+    <span class="ticker-item ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section reveal" id="features">
+  <div class="section-label">✦ Recursos</div>
+  <h2 class="section-title">Tudo que você precisa para<br>aprender com diversão</h2>
+  <p class="section-sub">Ferramentas criadas para engajar, motivar e manter o foco nos estudos.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(124,58,237,0.15)">🎮</div>
+      <div class="feat-name">Sistema de XP & Níveis</div>
+      <div class="feat-desc">Cada missão concluída concede XP. Suba de nível e desbloqueie novos títulos conforme avança nos estudos.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(245,158,11,0.15)">💰</div>
+      <div class="feat-name">Moedas & Loja</div>
+      <div class="feat-desc">Ganhe moedas respondendo questões e troque por itens, avatares e personalizações na loja do EduQuest.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(239,68,68,0.15)">🔥</div>
+      <div class="feat-name">Streak Diário</div>
+      <div class="feat-desc">Estude todos os dias e mantenha sua sequência ativa. Quanto mais dias seguidos, maior o bônus de XP!</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(16,185,129,0.15)">🎯</div>
+      <div class="feat-name">Missões Personalizadas</div>
+      <div class="feat-desc">Professores criam missões específicas para a turma. Conclua para ganhar XP e moedas extras.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(59,130,246,0.15)">🧠</div>
+      <div class="feat-name">Quiz com Timer</div>
+      <div class="feat-desc">Responda perguntas cronometradas em diversas matérias. Quanto mais rápido, mais pontos você ganha!</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(236,72,153,0.15)">🏆</div>
+      <div class="feat-name">Ranking da Turma</div>
+      <div class="feat-desc">Veja onde você se posiciona na turma, no mês e no geral. Compita de forma saudável e evolua juntos.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(124,58,237,0.15)">⏱️</div>
+      <div class="feat-name">Modo Foco (Pomodoro)</div>
+      <div class="feat-desc">25 minutos de concentração total. Complete sessões de foco para ganhar bônus e manter a produtividade.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(245,158,11,0.15)">📊</div>
+      <div class="feat-name">Dashboard dos Pais</div>
+      <div class="feat-desc">Pais acompanham progresso, metas e alertas dos filhos em tempo real, com gráficos e relatórios completos.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(16,185,129,0.15)">🏅</div>
+      <div class="feat-name">Conquistas & Badges</div>
+      <div class="feat-desc">Desbloqueie badges ao atingir marcos especiais: 7 dias de streak, 100 XP, primeira missão e muito mais.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles-section reveal" id="roles">
+  <div class="roles-inner">
+    <div class="section-label">✦ Perfis de Acesso</div>
+    <h2 class="section-title">Cada um tem seu espaço</h2>
+    <p class="section-sub">Alunos, pais e professores — todos com dashboards dedicados e funcionalidades exclusivas.</p>
+
+    <div class="roles-grid">
+      <div class="role-card student">
+        <span class="role-emoji">🦊</span>
+        <div class="role-name">Aluno</div>
+        <p class="role-desc">Complete missões, participe de quizzes, suba de nível, personalize seu avatar e conquiste seu lugar no ranking da turma.</p>
+        <a href="login.html" class="role-btn">Acessar como Aluno →</a>
+      </div>
+      <div class="role-card parents">
+        <span class="role-emoji">👨‍👩‍👧</span>
+        <div class="role-name">Pais / Responsáveis</div>
+        <p class="role-desc">Acompanhe o progresso escolar dos filhos com gráficos detalhados, alertas de engajamento e metas personalizadas.</p>
+        <a href="login.html" class="role-btn">Acessar como Responsável →</a>
+      </div>
+      <div class="role-card teacher">
+        <span class="role-emoji">👩‍🏫</span>
+        <div class="role-name">Professor</div>
+        <p class="role-desc">Crie questões e missões para a turma, acompanhe o desempenho individual e identifique alunos que precisam de atenção.</p>
+        <a href="login.html" class="role-btn">Acessar como Professor →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section reveal" id="como-funciona">
+  <div class="section-label">✦ Como Funciona</div>
+  <h2 class="section-title">Em 4 passos simples</h2>
+  <p class="section-sub">Comece sua jornada educacional gamificada em minutos.</p>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff">1</div>
+      <div class="step-title">Crie sua conta</div>
+      <p class="step-desc">Cadastre-se como aluno, responsável ou professor. Leva menos de 1 minuto.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff">2</div>
+      <div class="step-title">Escolha seu avatar</div>
+      <p class="step-desc">Personalize seu perfil, escolha um avatar e prepare-se para a aventura.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,#10B981,#059669);color:#fff">3</div>
+      <div class="step-title">Complete missões</div>
+      <p class="step-desc">Estude, responda quizzes e complete missões diárias para acumular XP e moedas.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,#EC4899,#BE185D);color:#fff">4</div>
+      <div class="step-title">Suba no ranking</div>
+      <p class="step-desc">Conquiste badges, desbloqueie títulos e prove que você é o melhor da turma!</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO / CTA -->
+<section class="demo-section reveal">
+  <div class="demo-inner">
+    <div>
+      <div class="section-label">✦ Pronto para jogar?</div>
+      <h2 class="section-title" style="margin-bottom:20px">Comece sua jornada<br>agora mesmo</h2>
+      <p style="font-size:16px;color:var(--text-muted);line-height:1.7;margin-bottom:36px;">
+        O EduQuest está pronto para transformar a sua forma de estudar. Entre com a conta demo ou crie a sua gratuitamente!
+      </p>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:28px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">🔑 Credenciais Demo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          <div style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px">🦊</div>
+            <div style="font-size:12px;font-weight:800;color:#A78BFA">Aluno</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">aluno@demo.com<br>123456</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px">👨‍👩‍👧</div>
+            <div style="font-size:12px;font-weight:800;color:#6EE7B7">Pais</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">pais@demo.com<br>123456</div>
+          </div>
+          <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px">👩‍🏫</div>
+            <div style="font-size:12px;font-weight:800;color:#FDE68A">Professor</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">prof@demo.com<br>123456</div>
+          </div>
+        </div>
+      </div>
+      <a href="login.html" class="btn-hero-primary" style="font-size:18px;padding:18px 40px">
+        🚀 Acessar o EduQuest
+      </a>
+    </div>
+    <div class="demo-preview">
+      <div class="demo-bar">
+        <div class="demo-dot" style="background:#EF4444"></div>
+        <div class="demo-dot" style="background:#F59E0B"></div>
+        <div class="demo-dot" style="background:#10B981"></div>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:8px">EduQuest — Dashboard</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-user-row">
+          <div class="demo-avatar">🦊</div>
+          <div style="flex:1">
+            <div style="font-weight:800;font-size:15px">Aluno Demo</div>
+            <div style="font-size:12px;color:var(--text-muted)">Nível 5 — Herói • 1200 XP</div>
+            <div class="demo-xp-bar"><div class="demo-xp-fill"></div></div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#F59E0B">500 💰</div>
+            <div style="font-size:12px;color:#EF4444">🔥 7 dias</div>
+          </div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;margin-bottom:12px">📋 Missões de Hoje</div>
+        <div class="demo-missions">
+          <div class="demo-mission done">
+            <span style="font-size:22px">✅</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:800;text-decoration:line-through;opacity:.6">Matemático do Dia</div>
+              <div style="font-size:11px;color:var(--text-muted)">+50 XP · +25 moedas</div>
+            </div>
+          </div>
+          <div class="demo-mission">
+            <span style="font-size:22px">📚</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:800">Leitor Curioso</div>
+              <div style="font-size:11px;color:var(--text-muted)">+40 XP · +20 moedas</div>
+            </div>
+            <span style="font-size:12px;font-weight:800;color:#F59E0B;background:rgba(245,158,11,0.1);padding:4px 10px;border-radius:99px">Em andamento</span>
+          </div>
+          <div class="demo-mission">
+            <span style="font-size:22px">🧠</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:800">Quiz Master</div>
+              <div style="font-size:11px;color:var(--text-muted)">+100 XP · +50 moedas</div>
+            </div>
+            <span style="font-size:12px;font-weight:800;color:#A78BFA;background:rgba(124,58,237,0.1);padding:4px 10px;border-radius:99px">Pendente</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🦉 EduQuest</div>
+  <div class="footer-copy">Projeto acadêmico — Plataforma de ensino gamificado</div>
+  <div class="footer-links">
+    <a href="login.html">Login</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="pais.html">Pais</a>
+    <a href="professor.html">Professor</a>
+  </div>
+</footer>
+
+<script>
+// ── ANIMATED BACKGROUND CANVAS ──
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], connections = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - .5) * .5;
+    this.vy = (Math.random() - .5) * .5;
+    this.r = Math.random() * 2 + .5;
+    this.alpha = Math.random() * .6 + .2;
+    const colors = ['167,139,250','245,158,11','16,185,129','236,72,153','59,130,246'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W) this.vx *= -1;
+    if (this.y < 0 || this.y > H) this.vy *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(124,58,237,${.15 * (1 - dist/120)})`;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: .1 });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
