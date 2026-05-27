@@ -764,4 +764,238 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(el => observer.observe(el));
 </script>
 </body>
+</html>     
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login EduQuest</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    }
+
+    .container{
+      width:350px;
+      background:white;
+      padding:40px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:30px;
+      color:#4f46e5;
+    }
+
+    input{
+      width:100%;
+      padding:15px;
+      margin-bottom:15px;
+      border:none;
+      border-radius:10px;
+      background:#f1f1f1;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:10px;
+      background:#4f46e5;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#4338ca;
+    }
+
+    .dashboard{
+      display:none;
+      text-align:center;
+    }
+
+    .dashboard h2{
+      color:#4f46e5;
+      margin-bottom:20px;
+    }
+
+    .logout{
+      margin-top:20px;
+      background:#ef4444;
+    }
+
+    .logout:hover{
+      background:#dc2626;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div id="loginArea">
+
+      <h1>EduQuest</h1>
+
+      <input type="text" id="nome" placeholder="Nome">
+
+      <input type="email" id="email" placeholder="Email">
+
+      <input type="password" id="senha" placeholder="Senha">
+
+      <button onclick="cadastrar()">
+        Criar Conta
+      </button>
+
+      <br><br>
+
+      <button onclick="login()">
+        Entrar
+      </button>
+
+    </div>
+
+    <div class="dashboard" id="dashboard">
+
+      <h2>
+        Bem-vindo,
+        <span id="usuarioNome"></span>
+      </h2>
+
+      <p>
+        Você entrou no sistema EduQuest.
+      </p>
+
+      <button class="logout" onclick="logout()">
+        Sair
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    function cadastrar(){
+
+      const nome =
+      document.getElementById("nome").value;
+
+      const email =
+      document.getElementById("email").value;
+
+      const senha =
+      document.getElementById("senha").value;
+
+      if(nome == "" || email == "" || senha == ""){
+        alert("Preencha todos os campos");
+        return;
+      }
+
+      const usuario = {
+        nome,
+        email,
+        senha
+      };
+
+      localStorage.setItem(
+        email,
+        JSON.stringify(usuario)
+      );
+
+      alert("Conta criada com sucesso!");
+
+    }
+
+    function login(){
+
+      const email =
+      document.getElementById("email").value;
+
+      const senha =
+      document.getElementById("senha").value;
+
+      const usuario =
+      JSON.parse(localStorage.getItem(email));
+
+      if(usuario && usuario.senha === senha){
+
+        localStorage.setItem(
+          "usuarioLogado",
+          email
+        );
+
+        mostrarDashboard();
+
+      } else {
+
+        alert("Email ou senha inválidos");
+
+      }
+
+    }
+
+    function mostrarDashboard(){
+
+      const email =
+      localStorage.getItem("usuarioLogado");
+
+      const usuario =
+      JSON.parse(localStorage.getItem(email));
+
+      document.getElementById("loginArea")
+      .style.display = "none";
+
+      document.getElementById("dashboard")
+      .style.display = "block";
+
+      document.getElementById("usuarioNome")
+      .innerText = usuario.nome;
+
+    }
+
+    function logout(){
+
+      localStorage.removeItem("usuarioLogado");
+
+      location.reload();
+
+    }
+
+    window.onload = () => {
+
+      const usuarioLogado =
+      localStorage.getItem("usuarioLogado");
+
+      if(usuarioLogado){
+        mostrarDashboard();
+      }
+
+    }
+
+  </script>
+
+</body>
 </html>
