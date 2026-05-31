@@ -1,5 +1,8 @@
-/* MELHORIAS PAIS */
+<!-- ========================= -->
+<!-- MELHORIAS PAIS COMPLETO -->
+<!-- ========================= -->
 
+<style>
 .search-box{
     width:100%;
     padding:14px 18px;
@@ -16,13 +19,47 @@
     border-color:var(--primary-light);
 }
 
+.filter-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.filter-btn{
+    padding:10px 15px;
+    border:none;
+    border-radius:12px;
+    background:var(--card2);
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+    transition:.3s;
+}
+
+.filter-btn:hover{
+    background:var(--primary);
+}
+
 .child-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
     cursor:pointer;
     transition:.3s;
 }
 
 .child-card:hover{
     transform:translateY(-5px) scale(1.02);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.child-name{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:10px;
 }
 
 .top-student{
@@ -59,6 +96,11 @@
     cursor:pointer;
     font-weight:800;
     font-size:14px;
+    transition:.3s;
+}
+
+.child-btn:hover{
+    transform:scale(1.02);
 }
 
 .btn-details{
@@ -75,30 +117,12 @@
     background:rgba(245,158,11,.15);
     color:#F59E0B;
 }
+</style>
 
-.filter-buttons{
-    display:flex;
-    gap:10px;
-    margin-bottom:20px;
-    flex-wrap:wrap;
-}
-
-.filter-btn{
-    padding:10px 15px;
-    border:none;
-    border-radius:12px;
-    background:var(--card2);
-    color:white;
-    cursor:pointer;
-    font-weight:700;
-}
-
-.filter-btn:hover{
-    background:var(--primary);
-}
-
+<!-- TÍTULO -->
 <div class="section-title">👧👦 Perfis dos Alunos</div>
 
+<!-- PESQUISA -->
 <div style="margin-bottom:20px;">
     <input
         type="text"
@@ -108,57 +132,161 @@
         onkeyup="filterChildren()">
 </div>
 
+<!-- FILTROS -->
 <div class="filter-buttons">
     <button class="filter-btn" onclick="showAllKids()">Todos</button>
     <button class="filter-btn" onclick="sortXP()">Mais XP</button>
     <button class="filter-btn" onclick="sortStreak()">Mais Dias</button>
-</div>  
-<div class="child-actions">
-    <button class="child-btn btn-details"
-        onclick="showStudent('${k.nome}')">
-        📊 Ver Detalhes
-    </button>
+</div>
 
-    <button class="child-btn btn-message"
-        onclick="showToast('💬','Abrindo conversa com ${k.nome}')">
-        💬 Mensagem
-    </button>
+<!-- ALUNO 1 -->
+<div class="child-card top-student">
+    <div class="child-name">João Silva</div>
 
-    <button class="child-btn btn-report"
-        onclick="showToast('📄','Relatório de ${k.nome}')">
-        📄 Relatório
-    </button>
-  function filterChildren(){
-    const search =
-    document.getElementById('searchChild')
-    .value.toLowerCase();
+    <div>⭐ XP: 3200</div>
+    <div>🔥 Sequência: 28 dias</div>
 
-    document.querySelectorAll('.child-card')
-    .forEach(card=>{
-        const nome = card.querySelector('.child-name')
-        .textContent.toLowerCase();
+    <div class="child-actions">
+        <button class="child-btn btn-details"
+            onclick="showStudent('João Silva')">
+            📊 Ver Detalhes
+        </button>
+
+        <button class="child-btn btn-message"
+            onclick="showToast('💬','Abrindo conversa com João Silva')">
+            💬 Mensagem
+        </button>
+
+        <button class="child-btn btn-report"
+            onclick="showToast('📄','Relatório de João Silva')">
+            📄 Relatório
+        </button>
+    </div>
+</div>
+
+<!-- ALUNO 2 -->
+<div class="child-card">
+    <div class="child-name">Maria Oliveira</div>
+
+    <div>⭐ XP: 2800</div>
+    <div>🔥 Sequência: 21 dias</div>
+
+    <div class="child-actions">
+        <button class="child-btn btn-details"
+            onclick="showStudent('Maria Oliveira')">
+            📊 Ver Detalhes
+        </button>
+
+        <button class="child-btn btn-message"
+            onclick="showToast('💬','Abrindo conversa com Maria Oliveira')">
+            💬 Mensagem
+        </button>
+
+        <button class="child-btn btn-report"
+            onclick="showToast('📄','Relatório de Maria Oliveira')">
+            📄 Relatório
+        </button>
+    </div>
+</div>
+
+<!-- ALUNO 3 -->
+<div class="child-card">
+    <div class="child-name">Pedro Santos</div>
+
+    <div>⭐ XP: 1900</div>
+    <div>🔥 Sequência: 12 dias</div>
+
+    <div class="child-actions">
+        <button class="child-btn btn-details"
+            onclick="showStudent('Pedro Santos')">
+            📊 Ver Detalhes
+        </button>
+
+        <button class="child-btn btn-message"
+            onclick="showToast('💬','Abrindo conversa com Pedro Santos')">
+            💬 Mensagem
+        </button>
+
+        <button class="child-btn btn-report"
+            onclick="showToast('📄','Relatório de Pedro Santos')">
+            📄 Relatório
+        </button>
+    </div>
+</div>
+
+<script>
+function filterChildren() {
+
+    const search = document
+        .getElementById("searchChild")
+        .value
+        .toLowerCase();
+
+    document.querySelectorAll(".child-card")
+    .forEach(card => {
+
+        const nome = card
+            .querySelector(".child-name")
+            .textContent
+            .toLowerCase();
 
         card.style.display =
-        nome.includes(search)
-        ? 'block'
-        : 'none';
+            nome.includes(search)
+            ? "block"
+            : "none";
     });
 }
 
 function showStudent(nome){
-    showToast('👦','Visualizando '+nome);
+    showToast("👦","Visualizando " + nome);
 }
 
 function sortXP(){
-    showToast('⭐','Ordenando por XP');
+    showToast("⭐","Ordenando por XP");
 }
 
 function sortStreak(){
-    showToast('🔥','Ordenando por sequência');
+    showToast("🔥","Ordenando por sequência");
 }
 
 function showAllKids(){
-    showToast('👨‍👩‍👧','Mostrando todos os alunos');
-}
-</div> 
 
+    document.querySelectorAll(".child-card")
+    .forEach(card=>{
+        card.style.display="block";
+    });
+
+    document.getElementById("searchChild").value="";
+
+    showToast("👨‍👩‍👧","Mostrando todos os alunos");
+}
+
+/* Caso seu projeto não tenha showToast */
+
+if(typeof showToast !== "function"){
+
+    function showToast(icon,msg){
+
+        const toast = document.createElement("div");
+
+        toast.innerHTML = `${icon} ${msg}`;
+
+        toast.style.position="fixed";
+        toast.style.bottom="20px";
+        toast.style.right="20px";
+        toast.style.padding="12px 18px";
+        toast.style.background="#111827";
+        toast.style.color="white";
+        toast.style.borderRadius="12px";
+        toast.style.zIndex="9999";
+        toast.style.fontWeight="700";
+
+        document.body.appendChild(toast);
+
+        setTimeout(()=>{
+            toast.remove();
+        },2500);
+    }
+
+}
+</script>
