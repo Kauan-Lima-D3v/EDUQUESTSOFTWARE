@@ -93,7 +93,7 @@
 
     .hero-title {
       font-family: 'Fredoka One', cursive;
-      font-size: clamp(56px, 8vw, 100px);
+      font-size: clamp(48px, 8vw, 100px);
       line-height: 1.05;
       margin-bottom: 24px;
       animation: fadeDown .8s .1s ease both;
@@ -144,13 +144,6 @@
     }
     .btn-hero-secondary:hover { background: rgba(255,255,255,0.08); border-color: var(--primary-light); }
 
-    /* floating emojis */
-    .float-emojis { position: relative; animation: fadeDown .8s .4s ease both; }
-    .emoji-float {
-      position: absolute; font-size: 28px; animation: floatRandom 6s ease-in-out infinite;
-      pointer-events: none;
-    }
-
     /* Stats row */
     .stats-row {
       display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
@@ -165,7 +158,7 @@
     }
     .stat-desc { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
 
-    /* ── FEATURES ── */
+    /* ── SECTION CONFIG ── */
     .section {
       position: relative; z-index: 10;
       padding: 100px 60px;
@@ -178,7 +171,7 @@
     }
     .section-title {
       font-family: 'Fredoka One', cursive;
-      font-size: clamp(36px, 4vw, 54px);
+      font-size: clamp(32px, 4vw, 54px);
       line-height: 1.1; margin-bottom: 16px;
     }
     .section-sub {
@@ -186,6 +179,7 @@
       line-height: 1.7; margin-bottom: 64px;
     }
 
+    /* ── FEATURES ── */
     .features-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
     }
@@ -200,7 +194,7 @@
       background: radial-gradient(circle at top left, rgba(124,58,237,0.08), transparent 60%);
       opacity: 0; transition: opacity .4s;
     }
-    .feat-card:hover { transform: translateY(-6px); border-color: var(--primary-light); }
+    .feat-card:hover { transform: translateY(-6px); border-color: var(--primary-light); box-shadow: 0 10px 30px rgba(124,58,237,0.1); }
     .feat-card:hover::before { opacity: 1; }
     .feat-icon {
       width: 60px; height: 60px; border-radius: 18px;
@@ -215,7 +209,7 @@
     /* ── ROLES ── */
     .roles-section {
       position: relative; z-index: 10;
-      padding: 60px; background: var(--card);
+      padding: 100px 60px; background: var(--card);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
@@ -232,12 +226,14 @@
     }
     .role-card:hover { transform: translateY(-8px); }
     .role-card.student { background: linear-gradient(135deg, #1E1B4B, #2D1B69); border-color: rgba(124,58,237,0.4); }
+    .role-card.student:hover { box-shadow: 0 15px 40px rgba(124,58,237,0.3); }
     .role-card.parents { background: linear-gradient(135deg, #064E3B, #065F46); border-color: rgba(16,185,129,0.4); }
+    .role-card.parents:hover { box-shadow: 0 15px 40px rgba(16,185,129,0.3); }
     .role-card.teacher { background: linear-gradient(135deg, #78350F, #92400E); border-color: rgba(245,158,11,0.4); }
+    .role-card.teacher:hover { box-shadow: 0 15px 40px rgba(245,158,11,0.3); }
+    
     .role-emoji { font-size: 72px; display: block; margin-bottom: 20px; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4)); }
-    .role-name {
-      font-family: 'Fredoka One', cursive; font-size: 28px; margin-bottom: 10px;
-    }
+    .role-name { font-family: 'Fredoka One', cursive; font-size: 28px; margin-bottom: 10px; }
     .role-desc { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 24px; }
     .role-btn {
       display: inline-block; padding: 12px 28px; border-radius: 14px;
@@ -276,7 +272,7 @@
     /* ── DEMO CARD ── */
     .demo-section {
       position: relative; z-index: 10;
-      padding: 60px;
+      padding: 100px 60px;
       background: linear-gradient(135deg, #0D0820, #130D25);
       border-top: 1px solid var(--border);
     }
@@ -334,12 +330,6 @@
       0%,100% { transform: scale(1); }
       50% { transform: scale(1.3); }
     }
-    @keyframes floatRandom {
-      0%,100% { transform: translate(0,0) rotate(0deg); }
-      25% { transform: translate(10px,-15px) rotate(10deg); }
-      50% { transform: translate(-8px,-25px) rotate(-5deg); }
-      75% { transform: translate(12px,-10px) rotate(15deg); }
-    }
     @keyframes ticker {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -364,36 +354,37 @@
     .ticker-sep { color: var(--secondary); }
 
     /* ── SCROLL REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(30px); transition: all .7s ease; }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all .8s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVIDADE ── */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid::before { display: none; }
+      .demo-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
 
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
-      .section { padding: 60px 24px; }
-      .features-grid { grid-template-columns: 1fr 1fr; }
+      .section, .roles-section, .demo-section { padding: 80px 24px; }
       .roles-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr 1fr; }
-      .steps-grid::before { display: none; }
-      .demo-inner { grid-template-columns: 1fr; }
-      .demo-preview { display: none; }
-      footer { flex-direction: column; gap: 16px; text-align: center; }
-      .roles-section { padding: 40px 24px; }
-      .demo-section { padding: 40px 24px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 40px 24px; }
     }
+
     @media (max-width: 600px) {
-      .features-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .stats-row { gap: 32px; }
+      .features-grid, .steps-grid { grid-template-columns: 1fr; }
+      .stats-row { gap: 24px; }
+      .hero-btns { flex-direction: column; width: 100%; max-width: 300px; }
+      .btn-hero-primary, .btn-hero-secondary { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- Animated canvas background -->
 <canvas id="bg-canvas"></canvas>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">🦉 EduQuest</div>
   <div class="nav-links">
@@ -404,7 +395,6 @@
   <a href="login.html" class="nav-cta">Entrar na Plataforma →</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-badge"><span>✨</span> Plataforma Gamificada de Aprendizado</div>
   <h1 class="hero-title">
@@ -412,7 +402,7 @@
     <div class="line2">Evolua. Conquiste.</div>
   </h1>
   <p class="hero-sub">
-    O EduQuest transforma o estudo em aventura. Ganhe XP, suba de nível, complete missões e compete no ranking — tudo enquanto aprende de verdade.
+    O EduQuest transforma o estudo em aventura. Ganhe XP, suba de nível, complete missões e compita no ranking — tudo enquanto aprende de verdade.
   </p>
   <div class="hero-btns">
     <a href="login.html" class="btn-hero-primary">🚀 Começar Agora</a>
@@ -438,7 +428,6 @@
   </div>
 </section>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker">
     <span class="ticker-item">⭐ Ganhe XP em cada missão</span>
@@ -457,7 +446,6 @@
     <span class="ticker-item ticker-sep">✦</span>
     <span class="ticker-item">👩‍🏫 Professores criam missões</span>
     <span class="ticker-item ticker-sep">✦</span>
-    <!-- duplicate for seamless loop -->
     <span class="ticker-item">⭐ Ganhe XP em cada missão</span>
     <span class="ticker-item ticker-sep">✦</span>
     <span class="ticker-item">🏆 Suba no ranking da turma</span>
@@ -477,7 +465,6 @@
   </div>
 </div>
 
-<!-- FEATURES -->
 <section class="section reveal" id="features">
   <div class="section-label">✦ Recursos</div>
   <h2 class="section-title">Tudo que você precisa para<br>aprender com diversão</h2>
@@ -532,12 +519,11 @@
   </div>
 </section>
 
-<!-- ROLES -->
 <section class="roles-section reveal" id="roles">
   <div class="roles-inner">
     <div class="section-label">✦ Perfis de Acesso</div>
     <h2 class="section-title">Cada um tem seu espaço</h2>
-    <p class="section-sub">Alunos, pais e professores — todos com dashboards dedicados e funcionalidades exclusivas.</p>
+    <p class="section-sub">Alunos,amp; pais e professores — todos com dashboards dedicados e funcionalidades exclusivas.</p>
 
     <div class="roles-grid">
       <div class="role-card student">
@@ -562,7 +548,6 @@
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
 <section class="section reveal" id="como-funciona">
   <div class="section-label">✦ Como Funciona</div>
   <h2 class="section-title">Em 4 passos simples</h2>
@@ -592,7 +577,6 @@
   </div>
 </section>
 
-<!-- DEMO / CTA -->
 <section class="demo-section reveal">
   <div class="demo-inner">
     <div>
@@ -603,21 +587,21 @@
       </p>
       <div style="background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:28px;">
         <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">🔑 Credenciais Demo</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div style="display:grid;grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));gap:12px;">
           <div style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:12px;text-align:center;">
             <div style="font-size:22px;margin-bottom:6px">🦊</div>
             <div style="font-size:12px;font-weight:800;color:#A78BFA">Aluno</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">aluno@demo.com<br>123456</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;word-break:break-all;">aluno@demo.com<br>123456</div>
           </div>
           <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:12px;text-align:center;">
             <div style="font-size:22px;margin-bottom:6px">👨‍👩‍👧</div>
             <div style="font-size:12px;font-weight:800;color:#6EE7B7">Pais</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">pais@demo.com<br>123456</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;word-break:break-all;">pais@demo.com<br>123456</div>
           </div>
           <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:12px;text-align:center;">
             <div style="font-size:22px;margin-bottom:6px">👩‍🏫</div>
             <div style="font-size:12px;font-weight:800;color:#FDE68A">Professor</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">prof@demo.com<br>123456</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;word-break:break-all;">prof@demo.com<br>123456</div>
           </div>
         </div>
       </div>
@@ -625,7 +609,7 @@
         🚀 Acessar o EduQuest
       </a>
     </div>
-    <div class="demo-preview">
+    <div class="demo-preview" style="display: block;">
       <div class="demo-bar">
         <div class="demo-dot" style="background:#EF4444"></div>
         <div class="demo-dot" style="background:#F59E0B"></div>
@@ -676,7 +660,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">🦉 EduQuest</div>
   <div class="footer-copy">Projeto acadêmico — Plataforma de ensino gamificado</div>
@@ -689,3 +672,64 @@
 </footer>
 
 <script>
+  // ── BACKGROUND CANVAS ANIMATION (Estrelas Espaciais Interativas) ──
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let stars = [];
+  const numStars = 60;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  for (let i = 0; i < numStars; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: Math.random() * 0.02 + 0.005
+    });
+  }
+
+  function animateCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(155, 142, 196,"; 
+    
+    stars.forEach(star => {
+      star.alpha += star.speed;
+      if (star.alpha > 1 || star.alpha < 0) {
+        star.speed = -star.speed;
+      }
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(167, 139, 250, ${Math.abs(star.alpha)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animateCanvas);
+  }
+  animateCanvas();
+
+  // ── SCROLL REVEAL ENGINE (Faz os elementos aparecerem ao rolar a página) ──
+  const revealElements = document.querySelectorAll('.reveal');
+  
+  const revealOnScroll = () => {
+    const triggerBottom = window.innerHeight * 0.85;
+    revealElements.forEach(el => {
+      const elTop = el.getBoundingClientRect().top;
+      if (elTop < triggerBottom) {
+        el.classList.add('visible');
+      }
+    });
+  };
+
+  window.addEventListener('scroll', revealOnScroll);
+  // Executa uma vez no início para checar elementos já visíveis
+  revealOnScroll();
+</script>
+</body>
+</html>
